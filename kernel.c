@@ -85,15 +85,27 @@ void terminal_putentryat(char c, uint8_t colour, size_t x, size_t y)
 	terminal_buffer[index] = vga_entry(c, colour);
 }
 
+void terminal_newline()
+{
+	terminal_column = 0;
+	if (++terminal_row == VGA_HEIGHT)
+	{
+		terminal_row = 0;
+	}
+}
+
 void terminal_putchar(char c)
 {
-	terminal_putentryat(c, terminal_colour, terminal_column, terminal_row);
-	if (++terminal_column == VGA_WIDTH)
+	if (c == '\n')
 	{
-		terminal_column = 0;
-		if (++terminal_row == VGA_HEIGHT)
+		terminal_newline();
+	}
+	else
+	{
+		terminal_putentryat(c, terminal_colour, terminal_column, terminal_row);
+		if (++terminal_column == VGA_WIDTH)
 		{
-			terminal_row = 0;
+			terminal_newline();
 		}
 	}
 }
@@ -116,6 +128,7 @@ void kernel_main(void)
 	/* Initialize terminal interface */
 	terminal_initialize();
 
-	/* Newline support is left as an exercise */
 	terminal_writestring("Hello, kernelspace! \n");
+
+	terminal_writestring("These violent delights have violent ends \n");
 }
