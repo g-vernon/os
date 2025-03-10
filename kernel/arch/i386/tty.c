@@ -50,7 +50,7 @@ void terminal_scroll()
 	
 	const uint16_t vga_blank = vga_entry(' ', terminal_colour);
 	const size_t start_pos = (VGA_HEIGHT - 1) * VGA_WIDTH;
-	memset((void *)start_pos, vga_blank, VGA_WIDTH);
+	memset((void*)start_pos, vga_blank, VGA_WIDTH);
 
 	for (size_t x = 0; x < VGA_WIDTH; x++)
 	{
