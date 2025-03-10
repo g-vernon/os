@@ -24,6 +24,10 @@ LIBK_CFLAGS:=$(LIBK_CFLAGS) $(KERNEL_ARCH_CFLAGS)
 
 FREEOBJS=\
 $(ARCH_FREEOBJS) \
+string/memcmp.o \
+string/memcpy.o \
+string/memmove.o \
+string/memset.o \
 string/strlen.o \
 
 HOSTEDOBJS=\

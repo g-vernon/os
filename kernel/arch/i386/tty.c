@@ -45,14 +45,13 @@ void terminal_putentryat(unsigned char c, uint8_t colour, size_t x, size_t y)
 
 void terminal_scroll()
 {
-	for (size_t y = 0; y < VGA_HEIGHT - 1; y++)
-	{
-		for (size_t x = 0; x < VGA_WIDTH; x++)
-		{
-			const size_t index = y * VGA_WIDTH + x;
-			terminal_buffer[index] = terminal_buffer[index + VGA_WIDTH];
-		}
-	}
+	memmove(terminal_buffer, terminal_buffer + VGA_WIDTH,
+		sizeof(terminal_buffer[0]) * VGA_WIDTH * (VGA_HEIGHT - 1));	
+	
+	const uint16_t vga_blank = vga_entry(' ', terminal_colour);
+	const size_t start_pos = (VGA_HEIGHT - 1) * VGA_WIDTH;
+	memset((void *)start_pos, vga_blank, VGA_WIDTH);
+
 	for (size_t x = 0; x < VGA_WIDTH; x++)
 	{
 		const size_t index = (VGA_HEIGHT - 1) * VGA_WIDTH + x;
