@@ -69,8 +69,8 @@ _start:
 	high-level kernel is entered. It's best to minimize the early
 	environment where crucial features are offline. Note that the
 	processor is not fully initialized yet: features such as floating
-	point isntructions and instruction set extensions are not initialized
-	yet. The Global Descriptor Table (GDT) should be loaded here. Pading
+	point instructions and instruction set extensions are not initialized
+	yet. The Global Descriptor Table (GDT) should be loaded here. Paging
 	should be enabled here. C++ features such as global constructors and
 	exceptions will require runtime support as well.
 	*/
