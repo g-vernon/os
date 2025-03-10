@@ -85,12 +85,30 @@ void terminal_putentryat(char c, uint8_t colour, size_t x, size_t y)
 	terminal_buffer[index] = vga_entry(c, colour);
 }
 
+void terminal_scroll()
+{
+	for (size_t y = 0; y < VGA_HEIGHT - 1; y++)
+	{
+		for (size_t x = 0; x < VGA_WIDTH; x++)
+		{
+			const size_t index = y * VGA_WIDTH + x;
+			terminal_buffer[index] = terminal_buffer[index + VGA_WIDTH];
+		}
+	}
+	for (size_t x = 0; x < VGA_WIDTH; x++)
+	{
+		const size_t index = (VGA_HEIGHT - 1) * VGA_WIDTH + x;
+		terminal_buffer[index] = vga_entry(' ', terminal_colour);
+	}
+}
+
 void terminal_newline()
 {
 	terminal_column = 0;
 	if (++terminal_row == VGA_HEIGHT)
 	{
-		terminal_row = 0;
+		terminal_scroll();
+		terminal_row--;
 	}
 }
 
@@ -129,6 +147,5 @@ void kernel_main(void)
 	terminal_initialize();
 
 	terminal_writestring("Hello, kernelspace! \n");
-
 	terminal_writestring("These violent delights have violent ends \n");
 }
