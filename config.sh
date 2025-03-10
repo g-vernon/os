@@ -1,5 +1,5 @@
-SYSTEM_HEADER_PROJECTS="kernel"
-PROJECTS="kernel"
+SYSTEM_HEADER_PROJECTS="libc kernel"
+PROJECTS="libc kernel"
 
 export MAKE=${MAKE:-make}
 export HOST=${HOST:-$(./default-host.sh)}
@@ -11,6 +11,7 @@ export CC=${HOST}-gcc
 export PREFIX=/usr
 export EXEC_PREFIX=$PREFIX
 export BOOTDIR=/boot
+export LIBDIR=$EXEC_PREFIX/lib
 export INCLUDEDIR=$PREFIX/include
 
 export CFLAGS='-O2 -g'
