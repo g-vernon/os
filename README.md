@@ -14,7 +14,7 @@ It should be placed on the user path so that the programs `i686-elf-as` and `i68
 
 Ensure build prerequisites are met.
 
-Run `make`
+Run `./iso.sh`
 
 This will produce an ISO image `os.iso`
 

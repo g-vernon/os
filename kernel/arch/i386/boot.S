@@ -69,11 +69,13 @@ _start:
 	high-level kernel is entered. It's best to minimize the early
 	environment where crucial features are offline. Note that the
 	processor is not fully initialized yet: features such as floating
-	point isntructions and instruction set extensions are not initialized
-	yet. The Global Descriptor Table (GDT) should be loaded here. Pading
-	should be enabled here. C++ features such as global constructors and
-	exceptions will require runtime support as well.
+	point instructions and instruction set extensions are not initialized
+	yet. The Global Descriptor Table (GDT) should be loaded here. Paging
+	should be enabled here.
 	*/
+
+	/* Call global constructors */
+	call _init
 
 	/*
 	Enter the high-level kernel. The ABI requires the stack to be 16-bit
