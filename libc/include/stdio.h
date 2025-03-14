@@ -5,8 +5,8 @@
 
 #define EOF (-1)
 
-int printf(const char* __restrict fmt, ...);
+int printf(const char *__restrict fmt, ...);
 int putchar(int c);
-int puts(const char* str);
+int puts(const char *str);
 
 #endif

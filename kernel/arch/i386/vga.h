@@ -22,12 +22,14 @@ typedef enum {
 	VGA_COLOUR_WHITE = 15,
 } VgaColour;
 
-static inline uint8_t vga_entry_colour(VgaColour fg, VgaColour bg) {
+static inline uint8_t vga_entry_colour(VgaColour fg, VgaColour bg)
+{
 	return fg | bg << 4;
 }
 
-static inline uint16_t vga_entry(unsigned char uc, uint8_t colour) {
-	return (uint16_t) uc | (uint16_t) colour << 8;
+static inline uint16_t vga_entry(unsigned char uc, uint8_t colour)
+{
+	return (uint16_t)uc | (uint16_t)colour << 8;
 }
 
 #endif
