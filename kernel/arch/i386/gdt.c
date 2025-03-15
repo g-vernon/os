@@ -1,5 +1,10 @@
 #include "gdt.h"
 
+#include <string.h>
+
+/* File config */
+#define GDT_SIZE 6
+
 /* Access byte masks */
 #define PRESENT(x) ((x) << 7)
 #define DPL(x) (((x) & 0x03) << 5) /* Privilege level */
@@ -22,16 +27,22 @@
 #define UCODE_ACCESS PRESENT(1) | DPL(3) | DESC_TYPE(1) | EXECUTABLE(1) | RW(1)
 #define UDATA_ACCESS PRESENT(1) | DPL(3) | DESC_TYPE(1) | RW(1)
 
+#define TSS_ACCESS \
+	PRESENT(1) | DPL(3) | DESC_TYPE(0) | EXECUTABLE(1) | ACCESSED(1)
+
 /* Flags */
 #define FLAGS GRANULARITY(1) | SIZE(1)
+#define TSS_FLAGS SIZE(1)
 
 extern void load_seg_registers(uint32_t addr);
+extern void load_tss(void);
 
 void set_gdt_entry(uint32_t entry, uint32_t base, uint32_t limit,
 		   uint8_t access, uint8_t flags);
 
-GdtEntry gdt[5];
+GdtEntry gdt[GDT_SIZE];
 GdtPtr gdt_ptr;
+TssEntry tss;
 
 void init_gdt()
 {
@@ -48,7 +59,9 @@ void init_gdt()
 	set_gdt_entry(4, 0, 0xFFFFFFFF, UDATA_ACCESS,
 		      FLAGS); /* User data segment */
 
+	write_tss(5, 0x10, 0x0);
 	load_seg_registers((uint32_t)&gdt_ptr);
+	load_tss();
 }
 
 void set_gdt_entry(uint32_t entry, uint32_t base, uint32_t limit,
@@ -61,4 +74,17 @@ void set_gdt_entry(uint32_t entry, uint32_t base, uint32_t limit,
 	gdt[entry].flags = (limit >> 16) & 0xF;
 	gdt[entry].flags |= (flags & 0xF) << 4;
 	gdt[entry].access = access;
+}
+
+void write_tss(uint32_t num, uint16_t ss0, uint32_t esp0)
+{
+	const uint32_t base = (uint32_t)&tss;
+	const uint32_t limit = sizeof(tss) - 1;
+
+	set_gdt_entry(num, base, limit, TSS_ACCESS, TSS_FLAGS);
+	memset(&tss, 0, sizeof(tss));
+	tss.ss0 = ss0;
+	tss.esp0 = esp0;
+	tss.cs = 0x08 | 0x3; /* Setting privilege level to ring 3 */
+	tss.ss = tss.ds = tss.es = tss.fs = tss.gs = 0x10 | 0x3;
 }

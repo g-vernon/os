@@ -1,4 +1,5 @@
 .global load_seg_registers
+.global load_tss
 
 .equ SEG_K_CODE, 0x1
 .equ SEG_K_DATA, 0x2
@@ -29,4 +30,9 @@ load_seg_registers:
 	*/
 	ljmp $(SEG_K_CODE<<3), $.load_cs_reg
 .load_cs_reg:
+	ret
+
+load_tss:
+	mov $0x28, %ax
+	ltr %ax
 	ret
