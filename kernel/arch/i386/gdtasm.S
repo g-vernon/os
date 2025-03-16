@@ -1,3 +1,5 @@
+#include "gdt.h"
+
 .global load_seg_registers
 .global load_tss
 
@@ -11,7 +13,7 @@ load_seg_registers:
 	/* Segment selector bits
 	15-3: GDT entry, 2: TI (0 = use GDT), 1-0: RPL (00 = kernel)
 	*/
-	mov $(SEG_K_DATA<<3), %ax
+	mov $SEG_KDATA, %ax
 	mov %ax, %ds
 	mov %ax, %es
 	mov %ax, %fs
@@ -28,7 +30,7 @@ load_seg_registers:
 	Here we don't do a 'far return', and so we restore our EIP only but keep the
 	new selector which we wrote in the CS register.
 	*/
-	ljmp $(SEG_K_CODE<<3), $.load_cs_reg
+	ljmp $SEG_KCODE, $.load_cs_reg
 .load_cs_reg:
 	ret
 
