@@ -239,6 +239,7 @@ void *irq_routines[NUM_IRQ] = {
 void irq_install_handler(int irq, void (*handler)(InterruptRegisters *regs))
 {
 	irq_routines[irq] = handler;
+	printf("Installed irq handler %d at %d \n", irq, handler);
 }
 
 void irq_uninstall_handler(int irq)
