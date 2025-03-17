@@ -7,4 +7,5 @@ void kernel_main(void)
 	terminal_initialize();
 	printf("Hello, kernelspace! \n");
 	printf("These violent delights have violent ends \n");
+	for(;;);
 }

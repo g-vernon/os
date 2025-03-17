@@ -42,5 +42,7 @@ typedef struct {
 } __attribute__((packed)) InterruptRegisters;
 
 void init_idt();
+void irq_install_handler(int irq, void (*handler)(InterruptRegisters *regs));
+void outb(uint16_t port, uint8_t data);
 
 #endif // _IDT_H
