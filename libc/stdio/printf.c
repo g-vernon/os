@@ -59,6 +59,40 @@ int printf(const char *restrict format, ...)
 			written++;
 			break;
 		}
+		case 'd': {
+			format++;
+			int num = va_arg(parameters, int);
+			size_t len = 0;
+			char num_str[11];
+
+			if (num < 0) {
+				if (!max_remaining) {
+					/* TODO: Set errno to EOVERFLOW */
+					return -1;
+				}
+				num = -num;
+				if (!print("-", sizeof(char)))
+					return -1;
+				written++;
+				max_remaining--;
+			}
+
+			do {
+				num_str[len++] = (num % 10) + 48;
+			} while (num /= 10);
+
+			while (len) {
+				if (!max_remaining) {
+					/* TODO: Set errno to EOVERFLOW */
+					return -1;
+				}
+				if (!print(&num_str[--len], sizeof(char)))
+					return -1;
+				written++;
+				max_remaining--;
+			}
+			break;
+		}
 		case 's': {
 			format++;
 			const char *str = va_arg(parameters, const char *);

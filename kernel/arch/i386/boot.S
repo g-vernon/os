@@ -61,6 +61,12 @@ _start:
 	/* Initialise Global Descriptor Table (GDT) */
 	call init_gdt
 
+	/* Initialise Interrupt Descriptor Table (IDT) */
+	call init_idt
+
+	/* Initialise PIC */
+	call init_timer
+
 	/* TODO: Enable paging */
 
 	/* Call global constructors */

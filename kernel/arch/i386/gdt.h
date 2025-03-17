@@ -1,5 +1,17 @@
-#include <stdint.h>
+#ifndef _GDT_H
+#define _GTD_H
 
+#ifndef __ASSEMBLER__
+#include <stdint.h>
+#endif
+
+#define SEG_KCODE (1 << 3)
+#define SEG_KDATA (2 << 3)
+#define SEG_UCODE (3 << 3)
+#define SEG_UDATA (4 << 3)
+#define SEG_TSS (5 << 3)
+
+#ifndef __ASSEMBLER__
 typedef struct {
 	uint16_t limit; /* Least 16 bits of 20-bit limit */
 	uint16_t base_low;
@@ -46,3 +58,6 @@ typedef struct {
 
 void init_gdt();
 void write_tss(uint32_t num, uint16_t ss0, uint32_t esp0);
+
+#endif // __ASSEMBLER__
+#endif // _GDT_H
